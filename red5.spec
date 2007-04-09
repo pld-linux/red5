@@ -31,7 +31,7 @@ Red5 is an Open Source Flash Server written in Java that supports:
 %setup -q -n %{name}-%{version}%{_rc}
 
 %build
-# some source files contain '»' character and javac barfs on that
+# some source files contain 'Â»' character and javac barfs on that
 export LC_ALL=en_US
 %ant dist
 
