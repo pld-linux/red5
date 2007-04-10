@@ -3,8 +3,8 @@
 #
 %define		_rc		rc2
 %define		_rel	0.1
-Summary:	Red5 : Open Source Flash Server
-Summary(pl.UTF-8):	Red5 : Otwarty serwer Flasha
+Summary:	Red5: Open Source Flash Server
+Summary(pl.UTF-8):	Red5: Otwarty serwer Flasha
 Name:		red5
 Version:	0.6
 Release:	0.%{_rc}.%{_rel}
@@ -29,7 +29,6 @@ Red5 is an Open Source Flash Server written in Java that supports:
 - Remoting
 
 %description -l pl.UTF-8
-
 Red5 to napisany w Javie, otwarty serwer Flasha który wspiera:
 - Strumieniowanie Audio/Wideo (FLV oraz MP3)
 - Nagrywanie strumieni klienta (tylko FLV)
