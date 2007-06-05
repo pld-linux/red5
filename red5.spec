@@ -1,17 +1,15 @@
 # TODO
 # - packaging
 #
-%define		_rc		rc2
-%define		_rel	0.1
 Summary:	Red5: Open Source Flash Server
 Summary(pl.UTF-8):	Red5: Otwarty serwer Flasha
 Name:		red5
-Version:	0.6
-Release:	0.%{_rc}.%{_rel}
+Version:	0.6.1
+Release:	0.1
 License:	LGPL
 Group:		Applications
-Source0:	http://dl.fancycode.com/red5/%{name}-%{version}%{_rc}.tar.gz
-# Source0-md5:	7c41ff734cd8153cb3ec37104f5954c1
+Source0:	http://dl.fancycode.com/red5/red5-0.6.1.tar.gz
+# Source0-md5:	723596e987ecb9559e2c40375b8b870c
 URL:		http://www.osflash.org/red5/
 BuildRequires:	ant
 BuildRequires:	jaxp_parser_impl
@@ -48,7 +46,7 @@ Documentation for %{name} -
 Dokumentacja do %{name} -
 
 %prep
-%setup -q -n %{name}-%{version}%{_rc}
+%setup -q
 
 %build
 # some source files contain '»' character and javac barfs on that
