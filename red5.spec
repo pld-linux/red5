@@ -8,7 +8,7 @@ Version:	0.6.1
 Release:	0.1
 License:	LGPL
 Group:		Applications
-Source0:	http://dl.fancycode.com/red5/red5-0.6.1.tar.gz
+Source0:	http://dl.fancycode.com/red5/%{name}-%{version}.tar.gz
 # Source0-md5:	723596e987ecb9559e2c40375b8b870c
 URL:		http://www.osflash.org/red5/
 BuildRequires:	ant
@@ -40,10 +40,10 @@ Group:		Documentation
 Requires:	jpackage-utils
 
 %description javadoc
-Documentation for %{name} -
+Documentation for %{name}.
 
 %description javadoc -l pl.UTF-8
-Dokumentacja do %{name} -
+Dokumentacja do %{name}.
 
 %prep
 %setup -q
