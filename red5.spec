@@ -5,11 +5,12 @@ Summary:	Red5: Open Source Flash Server
 Summary(pl.UTF-8):	Red5: Otwarty serwer Flasha
 Name:		red5
 Version:	0.6.2
-Release:	0.1
+Release:	0.2
 License:	LGPL
 Group:		Applications
 Source0:	http://dl.fancycode.com/red5/%{name}-%{version}.tar.gz
 # Source0-md5:	ed769422e86359922433de3805a0e361
+Source1:	%{name}
 URL:		http://www.osflash.org/red5/
 BuildRequires:	ant
 BuildRequires:	jaxp_parser_impl
@@ -17,6 +18,8 @@ BuildRequires:	jdk >= 1.6
 BuildRequires:	rpmbuild(macros) >= 1.300
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		_appdir	%{_datadir}/%{name}
 
 %description
 Red5 is an Open Source Flash Server written in Java that supports:
@@ -55,11 +58,12 @@ export LC_ALL=en_US
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_javadir}
+install -d $RPM_BUILD_ROOT{%{_appdir},%{_bindir}}
 
-# install jar
-cp -a dist/%{name}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}-%{version}.jar
-ln -s %{name}-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}.jar
+cp -a dist/* $RPM_BUILD_ROOT%{_appdir}
+rm -rf $RPM_BUILD_ROOT%{_appdir}/doc
+rm -f $RPM_BUILD_ROOT%{_appdir}/red5.{bat,sh}
+install %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/red5
 
 # javadoc
 install -d $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
@@ -74,7 +78,8 @@ ln -nfs %{name}-%{version} %{_javadocdir}/%{name}
 
 %files
 %defattr(644,root,root,755)
-%{_javadir}/*.jar
+%attr(755,root,root) %{_bindir}/red5
+%{_appdir}
 
 %files javadoc
 %defattr(644,root,root,755)
