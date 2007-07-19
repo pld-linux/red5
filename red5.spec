@@ -6,7 +6,7 @@ Summary:	Red5: Open Source Flash Server
 Summary(pl.UTF-8):	Red5: Otwarty serwer Flasha
 Name:		red5
 Version:	0.6.2
-Release:	0.2
+Release:	0.3
 License:	LGPL
 Group:		Applications
 Source0:	http://dl.fancycode.com/red5/%{name}-%{version}.tar.gz
@@ -61,9 +61,8 @@ export LC_ALL=en_US
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_appdir},%{_bindir}}
 
-cp -a dist/* $RPM_BUILD_ROOT%{_appdir}
-rm -rf $RPM_BUILD_ROOT%{_appdir}/doc
-rm -f $RPM_BUILD_ROOT%{_appdir}/red5.{bat,sh}
+cp -a dist/{conf,lib,webapps} $RPM_BUILD_ROOT%{_appdir}
+cp -a dist/red5.jar $RPM_BUILD_ROOT%{_appdir}
 install %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/red5
 
 # javadoc
@@ -79,8 +78,14 @@ ln -nfs %{name}-%{version} %{_javadocdir}/%{name}
 
 %files
 %defattr(644,root,root,755)
+%doc license.txt
 %attr(755,root,root) %{_bindir}/red5
 %{_appdir}
+
+# NOTE
+# server may write to:
+# /usr/share/red5/webapps/oflaDemo/streams/*.meta
+# /usr/share/red5/webapps/oflaDemo/streams/red5RecordDemo*.flv
 
 %files javadoc
 %defattr(644,root,root,755)
