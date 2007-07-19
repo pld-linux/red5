@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# set JAVA_HOME from jpackage-utils if available
+. /usr/share/java-utils/java-functions
+set_javacmd
+
+# start red5
+cd /usr/share/red5
+exec $JAVACMD -Djava.security.manager -Djava.security.policy=conf/red5.policy -cp red5.jar:conf:$CLASSPATH org.red5.server.Standalone
