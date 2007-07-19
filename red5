@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# set JAVA_HOME from jpackage-utils if available
+# set $JAVACMD
 . /usr/share/java-utils/java-functions
 set_javacmd
 
