@@ -1,5 +1,6 @@
 # TODO
 # - packaging
+# - -demos package
 #
 Summary:	Red5: Open Source Flash Server
 Summary(pl.UTF-8):	Red5: Otwarty serwer Flasha
