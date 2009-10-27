@@ -13,6 +13,14 @@ Source0:	http://www.red5.org/downloads/0_8/red5-0.8.0.tar.gz
 # Source0-md5:	7be9296e6369a52b3607cfce1ac7ee01
 Source1:	%{name}
 URL:		http://red5.org/
+Requires:	rc-scripts
+Requires(post,preun):   /sbin/chkconfig
+Requires(postun):       /usr/sbin/groupdel
+Requires(postun):       /usr/sbin/userdel
+Requires(pre):  /bin/id
+Requires(pre):  /usr/bin/getgid
+Requires(pre):  /usr/sbin/groupadd
+Requires(pre):  /usr/sbin/useradd
 BuildRequires:	rpmbuild(macros) >= 1.300
 Provides:       group(servlet)
 Provides:       user(red5)
