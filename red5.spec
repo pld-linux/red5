@@ -14,6 +14,8 @@ Source0:	http://www.red5.org/downloads/0_8/red5-0.8.0.tar.gz
 Source1:	%{name}
 URL:		http://red5.org/
 BuildRequires:	rpmbuild(macros) >= 1.300
+Provides:       group(servlet)
+Provides:       user(red5)
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -68,6 +70,26 @@ ln -s %{name}-%{version} $RPM_BUILD_ROOT%{_javadocdir}/%{name} # ghost symlink
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%pre
+%groupadd -g 237 -r -f servlet
+%useradd -u 243 -r -d /var/lib/red5 -s /bin/false -c "red5 user" -g servlet red5
+
+%post
+/sbin/chkconfig --add red5
+%service red5 restart
+
+%preun
+if [ "$1" = "0" ]; then
+	%service red5 stop
+	/sbin/chkconfig --del red5
+fi
+
+%postun
+if [ "$1" = "0" ]; then
+	%userremove red5
+	%groupremove servlet
+fi
+
 %post javadoc
 ln -nfs %{name}-%{version} %{_javadocdir}/%{name}
 
@@ -76,7 +98,7 @@ ln -nfs %{name}-%{version} %{_javadocdir}/%{name}
 %doc license.txt
 %attr(755,root,root) %{_bindir}/red5
 %{_appdir}
-%attr(755,red5,red5) %{_localstatedir}/%{name}
+%attr(775,red5,servlet) %{_localstatedir}/%{name}
 
 %files javadoc
 %defattr(644,root,root,755)
