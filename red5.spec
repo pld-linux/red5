@@ -5,17 +5,14 @@
 Summary:	Red5: Open Source Flash Server
 Summary(pl.UTF-8):	Red5: Otwarty serwer Flasha
 Name:		red5
-Version:	0.6.2
-Release:	0.3
+Version:	0.8.0
+Release:	0.1
 License:	LGPL
 Group:		Applications
-Source0:	http://dl.fancycode.com/red5/%{name}-%{version}.tar.gz
-# Source0-md5:	ed769422e86359922433de3805a0e361
+Source0:	http://www.red5.org/downloads/0_8/red5-0.8.0.tar.gz
+# Source0-md5:	7be9296e6369a52b3607cfce1ac7ee01
 Source1:	%{name}
-URL:		http://www.osflash.org/red5/
-BuildRequires:	ant
-BuildRequires:	jaxp_parser_impl
-BuildRequires:	jdk >= 1.6
+URL:		http://red5.org/
 BuildRequires:	rpmbuild(macros) >= 1.300
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -50,24 +47,22 @@ Documentation for %{name}.
 Dokumentacja do %{name}.
 
 %prep
-%setup -q
-
-%build
-# some source files contain '»' character and javac barfs on that
-export LC_ALL=en_US
-%ant dist
+%setup -c
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_appdir},%{_bindir}}
+install -d $RPM_BUILD_ROOT{%{_appdir},%{_bindir},%{_localstatedir}/%{name}}
 
-cp -a dist/{conf,lib,webapps} $RPM_BUILD_ROOT%{_appdir}
-cp -a dist/red5.jar $RPM_BUILD_ROOT%{_appdir}
+cp -a {conf,lib,webapps} $RPM_BUILD_ROOT%{_appdir}
+cp -a red5.jar $RPM_BUILD_ROOT%{_appdir}
+
+mv $RPM_BUILD_ROOT%{_appdir}/webapps $RPM_BUILD_ROOT%{_localstatedir}/%{name}/webapps
+
 install %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/red5
 
 # javadoc
 install -d $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
-cp -a dist/doc/api/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
+cp -a doc/api/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
 ln -s %{name}-%{version} $RPM_BUILD_ROOT%{_javadocdir}/%{name} # ghost symlink
 
 %clean
@@ -81,11 +76,7 @@ ln -nfs %{name}-%{version} %{_javadocdir}/%{name}
 %doc license.txt
 %attr(755,root,root) %{_bindir}/red5
 %{_appdir}
-
-# NOTE
-# server may write to:
-# /usr/share/red5/webapps/oflaDemo/streams/*.meta
-# /usr/share/red5/webapps/oflaDemo/streams/red5RecordDemo*.flv
+%attr(755,red5,red5) %{_localstatedir}/%{name}
 
 %files javadoc
 %defattr(644,root,root,755)
