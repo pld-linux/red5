@@ -67,12 +67,16 @@ Dokumentacja do %{name}.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_appdatadir},%{_sbindir},%{_appstatedir},%{_appconfdir},%{_applogdir}}
+install -d $RPM_BUILD_ROOT{%{_appdatadir},%{_sbindir},%{_appstatedir}/work,%{_appconfdir},%{_applogdir}}
 install -d $RPM_BUILD_ROOT{/etc/sysconfig,/etc/rc.d/init.d,/var/run/red5}
 
 cp -a {red5.jar,boot.jar,lib} $RPM_BUILD_ROOT%{_appdatadir}
 cp -a webapps $RPM_BUILD_ROOT%{_appstatedir}
 cp -a conf/* $RPM_BUILD_ROOT%{_appconfdir}
+
+ln -s %{_appconfdir} $RPM_BUILD_ROOT%{_appdatadir}/conf
+ln -s %{_appstatedir}/webapps $RPM_BUILD_ROOT%{_appdatadir}/webapps
+ln -s %{_appstatedir}/work $RPM_BUILD_ROOT%{_appdatadir}/work
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_sbindir}/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/red5
@@ -114,9 +118,12 @@ ln -nfs %{name}-%{version} %{_javadocdir}/%{name}
 %defattr(644,root,root,755)
 %doc license.txt
 %{_appdatadir}
-%attr(775,red5,servlet) %{_appstatedir}
+%dir %attr(775,red5,red5) %{_appstatedir}
+%attr(775,red5,red5) %{_appstatedir}/work
+%attr(775,red5,servlet) %{_appstatedir}/webapps
 %attr(775,red5,red5) %{_applogdir}
-%config(noreplace) %attr(640,root,red5) %verify(not md5 mtime size) %{_appconfdir}
+%dir %attr(755,root,root) %{_appconfdir}
+%config(noreplace) %attr(644,root,root) %verify(not md5 mtime size) %{_appconfdir}/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(770,root,red5) /var/run/%{name}
