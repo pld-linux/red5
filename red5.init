@@ -32,7 +32,7 @@ start() {
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/red5 ]; then
 		msg_starting red5
-		<&- > /var/log/red5/red5.out daemon --user red5 /usr/sbin/red5.sh
+		<&- > /var/log/red5/red5.out daemon --user red5 /usr/sbin/red5
         	RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/red5
 	else
