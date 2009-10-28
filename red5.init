@@ -1,13 +1,12 @@
 #!/bin/sh
 #
-# red5	red5 open source flash server
+# red5	red5 Open Source Flash Server
 #
 # chkconfig:    345  84 16
 #
-# description:	red5 open source flash server
+# description:	red5 Open Source Flash Server
 #
 # $Id$
-
 
 # Source function library
 . /etc/rc.d/init.d/functions
@@ -21,7 +20,7 @@
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
 	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
-		msg_network_down red5
+		msg_network_down "Red5 Flash Server"
 		exit 1
 	fi
 else
@@ -30,37 +29,39 @@ fi
 
 start() {
 	# Check if the service is already running?
-	if [ ! -f /var/lock/subsys/red5 ]; then
-		msg_starting red5
-		<&- > /var/log/red5/red5.out daemon --user red5 /usr/sbin/red5
-        	RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/red5
-	else
-		msg_already_running red5
+	if [ -f /var/lock/subsys/red5 ]; then
+		msg_already_running "Red5 Flash Server"
+		return
 	fi
+
+	msg_starting "Red5 Flash Server"
+	# XXX? wtf is that? patch the "daemon" to close/redirect itself, or --closefds daemon() opt as last resort
+	<&- > /var/log/red5/red5.out daemon --user red5 /usr/sbin/red5
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/red5
 }
 
 stop() {
 	if [ ! -f /var/lock/subsys/red5 ]; then
-		msg_not_running "red5"
+		msg_not_running "Red5 Flash Server"
 		return
 	fi
 
 	# Stop daemons.
-	msg_stopping "red5"
-	killproc red5
-	killproc --pidfile /var/run/red5.pid red5 -TERM
+	msg_stopping "Red5 Flash Server"
+	killproc --pidfile /var/run/red5.pid red5
 	rm -f /var/lock/subsys/red5
 }
 
 condrestart() {
-	if [ -f /var/lock/subsys/red5 ]; then
-		stop
-		start
-	else
-		msg_not_running red5
+	if [ ! -f /var/lock/subsys/red5 ]; then
+		msg_not_running "Red5 Flash Server"
 		RETVAL=$1
+		return
 	fi
+
+	stop
+	start
 }
 
 RETVAL=0
