@@ -63,7 +63,7 @@ Documentation for %{name}.
 Dokumentacja do %{name}.
 
 %prep
-%setup -c
+%setup -q -c
 
 %install
 rm -rf $RPM_BUILD_ROOT
