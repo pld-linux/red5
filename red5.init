@@ -35,8 +35,7 @@ start() {
 	fi
 
 	msg_starting "Red5 Flash Server"
-	# XXX? wtf is that? patch the "daemon" to close/redirect itself, or --closefds daemon() opt as last resort
-	<&- > /var/log/red5/red5.out daemon --user red5 /usr/sbin/red5
+	daemon --user red5 /usr/sbin/red5
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/red5
 }
