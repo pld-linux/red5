@@ -1,4 +1,5 @@
-# JAVA_HOME=$(. /usr/share/java-utils/java-functions; set_jvm >&2; echo "$JAVA_HOME")
-# RED5_HOME=${RED_HOME:-"/usr/share/red5"}
-# RED5_WEBAPPSDIR=${RED_WEBAPPSDIR:-"/var/lib/red5/webapps"}
-# RED5_CLASSPATH="$RED5_CLASSPATH:$RED5_HOME/red5.jar:$RED5_HOME/conf"
+# TODO: document the vars
+#JAVA_HOME=$(. /usr/share/java-utils/java-functions; set_jvm >&2; echo "$JAVA_HOME")
+#RED5_HOME=${RED5_HOME:-/usr/share/red5}
+#RED5_WEBAPPSDIR=${RED5_WEBAPPSDIR:-/var/lib/red5/webapps}
+#RED5_CLASSPATH=$RED5_CLASSPATH:$RED5_HOME/red5.jar:$RED5_HOME/conf
