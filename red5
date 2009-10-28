@@ -1,9 +1,34 @@
 #!/bin/sh
 
+if [ -f /var/run/red5/red5.pid ]; then
+  echo "Pid file exists."
+  exit
+fi
+
 # set $JAVACMD
 . /usr/share/java-utils/java-functions
 set_javacmd
 
+export RED5_HOME=${RED_HOME:-"/usr/share/red5"}
+export RED5_WEBAPPSDIR=${RED_WEBAPPSDIR:-"/var/lib/red5/webapps"}
+export RED5_CLASSPATH="$RED5_CLASSPATH:$RED5_HOME/red5.jar:$RED5_HOME/conf"
+
+LOGGING_OPTS="-Dlogback.ContextSelector=org.red5.logging.LoggingContextSelector -Dcatalina.useNaming=true"
+SECURITY_OPTS="-Djava.security.debug=failure"
+JAVA_OPTS="$JAVA_OPTS $LOGGING_OPTS $SECURITY_OPTS"
+
+trap 'kill $(< /var/run/red5/red5.pid)' TERM
+
 # start red5
 cd /usr/share/red5
-exec $JAVACMD -Djava.security.manager -Djava.security.policy=conf/red5.policy -cp red5.jar:conf:$CLASSPATH org.red5.server.Standalone
+$JAVACMD \
+	$JAVA_OPTS \
+	-Dpython.home=$RED5_HOME/lib \
+	-Dred5.root=$RED5_HOME \
+	-Dred5.webappsdir=$RED5_WEBAPPSDIR \
+	-cp $RED5_CLASSPATH org.red5.server.Standalone "$@" &
+
+PID="$!"
+echo "$PID" > /var/run/red5/red5.pid
+wait $PID
+rm /var/run/red5/red5.pid
