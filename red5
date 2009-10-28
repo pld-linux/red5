@@ -1,34 +1,38 @@
-#!/bin/sh -x
+#!/bin/sh
 
 if [ -f /var/run/red5/red5.pid ]; then
-  echo "Pid file exists."
-  exit
+	echo >&2 "PID file exists."
+	exit 1
 fi
 
 # set $JAVACMD
 . /usr/share/java-utils/java-functions
 set_javacmd
 
-export RED5_HOME=${RED5_HOME:-"/usr/share/red5"}
-export RED5_WEBAPPSDIR=${RED5_WEBAPPSDIR:-"/var/lib/red5/webapps"}
-export RED5_CLASSPATH="${RED5_CLASSPATH:+"RED5_CLASSPATH:"}$RED5_HOME/boot.jar:/etc/red5"
+export RED5_HOME=${RED5_HOME:-/usr/share/red5}
+export RED5_WEBAPPSDIR=${RED5_WEBAPPSDIR:-/var/lib/red5/webapps}
+export RED5_CLASSPATH=$RED5_CLASSPATH${RED5_CLASSPATH:+}$RED5_HOME/boot.jar:/etc/red5
 
 LOGGING_OPTS="-Dlogback.ContextSelector=org.red5.logging.LoggingContextSelector -Dcatalina.useNaming=true"
 SECURITY_OPTS="-Djava.security.debug=failure"
-JAVA_OPTS="$JAVA_OPTS $LOGGING_OPTS $SECURITY_OPTS"
 
-trap 'kill $(< /var/run/red5/red5.pid)' TERM
+trap 'pid=$(cat /var/run/red5/red5.pid 2>/dev/null); [ "$pid" ] && kill $pid' TERM INT EXIT
 
 # start red5
-cd /usr/share/red5
+cd "$RED5_HOME"
 $JAVACMD \
 	$JAVA_OPTS \
+	$LOGGING_OPTS \
+	$SECURITY_OPTS \
 	-Dpython.home=$RED5_HOME/lib \
 	-Dred5.root=$RED5_HOME \
 	-Dred5.webappsdir=$RED5_WEBAPPSDIR \
-	-cp $RED5_CLASSPATH org.red5.server.Bootstrap "$@" > /var/log/red5/red5.out &
+	-cp $RED5_CLASSPATH org.red5.server.Bootstrap "$@" >> /var/log/red5/red5.out &
 
-PID="$!"
+PID=$!
+
+# XXX: what happens if $JAVACMD fails and $PID is empty?
+
 echo "$PID" > /var/run/red5/red5.pid
 wait $PID
 rm /var/run/red5/red5.pid
