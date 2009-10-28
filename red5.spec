@@ -9,24 +9,24 @@ Version:	0.8.0
 Release:	0.1
 License:	LGPL
 Group:		Applications
-Source0:	http://www.red5.org/downloads/0_8/red5-0.8.0.tar.gz
+Source0:	http://www.red5.org/downloads/0_8/%{name}-%{version}.tar.gz
 # Source0-md5:	7be9296e6369a52b3607cfce1ac7ee01
-Source1:	red5
-Source2:	red5.init
-Source3:	red5.sysconfig
+Source1:	%{name}
+Source2:	%{name}.init
+Source3:	%{name}.sysconfig
 URL:		http://red5.org/
-Requires:	rc-scripts
-Requires(post,preun):   /sbin/chkconfig
-Requires(postun):       /usr/sbin/groupdel
-Requires(postun):       /usr/sbin/userdel
-Requires(pre):  /bin/id
-Requires(pre):  /usr/bin/getgid
-Requires(pre):  /usr/sbin/groupadd
-Requires(pre):  /usr/sbin/useradd
 BuildRequires:	rpmbuild(macros) >= 1.300
-Provides:       group(servlet)
-Provides:       group(red5)
-Provides:       user(red5)
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires:	rc-scripts
+Provides:	group(red5)
+Provides:	group(servlet)
+Provides:	user(red5)
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -74,7 +74,7 @@ cp -a {red5.jar,lib} $RPM_BUILD_ROOT%{_appdatadir}
 cp -a webapps $RPM_BUILD_ROOT%{_appstatedir}
 cp -a conf/* $RPM_BUILD_ROOT%{_appconfdir}
 
-install %{SOURCE1} $RPM_BUILD_ROOT/usr/sbin/%{name}
+install %{SOURCE1} $RPM_BUILD_ROOT%{_sbindir}/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/red5
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/red5
 
@@ -117,9 +117,10 @@ ln -nfs %{name}-%{version} %{_javadocdir}/%{name}
 %attr(775,red5,servlet) %{_appstatedir}
 %attr(775,red5,red5) %{_applogdir}
 %config(noreplace) %attr(640,root,red5) %verify(not md5 mtime size) %{_appconfdir}
-%attr(754,root,root) /etc/rc.d/init.d/red5
-%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/red5
-%attr(770,root,red5) /var/run/red5
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
+%attr(770,root,red5) /var/run/%{name}
+%attr(755,root,root) %{_sbindir}/%{name}
 
 %files javadoc
 %defattr(644,root,root,755)
