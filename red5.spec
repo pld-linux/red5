@@ -11,6 +11,9 @@ License:	LGPL
 Group:		Applications
 Source0:	http://www.red5.org/downloads/0_8/red5-0.8.0.tar.gz
 # Source0-md5:	7be9296e6369a52b3607cfce1ac7ee01
+Source1:	red5
+Source2:	red5.init
+Source3:	red5.sysconfig
 URL:		http://red5.org/
 Requires:	rc-scripts
 Requires(post,preun):   /sbin/chkconfig
@@ -22,6 +25,7 @@ Requires(pre):  /usr/sbin/groupadd
 Requires(pre):  /usr/sbin/useradd
 BuildRequires:	rpmbuild(macros) >= 1.300
 Provides:       group(servlet)
+Provides:       group(red5)
 Provides:       user(red5)
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -63,11 +67,16 @@ Dokumentacja do %{name}.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_appdatadir},%{_bindir},%{_appstatedir},%{_appconfdir},%{_applogdir}}
+install -d $RPM_BUILD_ROOT{%{_appdatadir},%{_sbindir},%{_appstatedir},%{_appconfdir},%{_applogdir}}
+install -d $RPM_BUILD_ROOT{/etc/sysconfig,/etc/rc.d/init.d,/var/run/red5}
 
 cp -a {red5.jar,lib} $RPM_BUILD_ROOT%{_appdatadir}
 cp -a webapps $RPM_BUILD_ROOT%{_appstatedir}
 cp -a conf/* $RPM_BUILD_ROOT%{_appconfdir}
+
+install %{SOURCE1} $RPM_BUILD_ROOT/usr/sbin/%{name}
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/red5
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/red5
 
 # javadoc
 install -d $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
@@ -79,7 +88,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre
 %groupadd -g 237 -r -f servlet
-%useradd -u 243 -r -d /var/lib/red5 -s /bin/false -c "red5 user" -g servlet red5
+%groupadd -g 243 -r -f red5
+%useradd -u 243 -r -d /var/lib/red5 -s /bin/false -c "red5 user" -g red5 -G servlet red5
 
 %post
 /sbin/chkconfig --add red5
@@ -105,8 +115,11 @@ ln -nfs %{name}-%{version} %{_javadocdir}/%{name}
 %doc license.txt
 %{_appdatadir}
 %attr(775,red5,servlet) %{_appstatedir}
-%attr(775,red5,servlet) %{_applogdir}
-%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_appconfdir}
+%attr(775,red5,red5) %{_applogdir}
+%config(noreplace) %attr(640,root,red5) %verify(not md5 mtime size) %{_appconfdir}
+%attr(754,root,root) /etc/rc.d/init.d/red5
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/red5
+%attr(770,root,red5) /var/run/red5
 
 %files javadoc
 %defattr(644,root,root,755)
