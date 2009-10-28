@@ -11,7 +11,6 @@ License:	LGPL
 Group:		Applications
 Source0:	http://www.red5.org/downloads/0_8/red5-0.8.0.tar.gz
 # Source0-md5:	7be9296e6369a52b3607cfce1ac7ee01
-Source1:	%{name}
 URL:		http://red5.org/
 Requires:	rc-scripts
 Requires(post,preun):   /sbin/chkconfig
@@ -27,7 +26,10 @@ Provides:       user(red5)
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_appdir	%{_datadir}/%{name}
+%define		_appconfdir	%{_sysconfdir}/%{name}
+%define		_appdatadir	%{_datadir}/%{name}
+%define		_appstatedir	%{_localstatedir}/%{name}
+%define		_applogdir	%{_var}/log/%{name}
 
 %description
 Red5 is an Open Source Flash Server written in Java that supports:
@@ -61,14 +63,11 @@ Dokumentacja do %{name}.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_appdir},%{_bindir},%{_localstatedir}/%{name}}
+install -d $RPM_BUILD_ROOT{%{_appdatadir},%{_bindir},%{_appstatedir},%{_appconfdir},%{_applogdir}}
 
-cp -a {conf,lib,webapps} $RPM_BUILD_ROOT%{_appdir}
-cp -a red5.jar $RPM_BUILD_ROOT%{_appdir}
-
-mv $RPM_BUILD_ROOT%{_appdir}/webapps $RPM_BUILD_ROOT%{_localstatedir}/%{name}/webapps
-
-install %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/red5
+cp -a {red5.jar,lib} $RPM_BUILD_ROOT%{_appdatadir}
+cp -a webapps $RPM_BUILD_ROOT%{_appstatedir}
+cp -a conf/* $RPM_BUILD_ROOT%{_appconfdir}
 
 # javadoc
 install -d $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
@@ -104,9 +103,10 @@ ln -nfs %{name}-%{version} %{_javadocdir}/%{name}
 %files
 %defattr(644,root,root,755)
 %doc license.txt
-%attr(755,root,root) %{_bindir}/red5
-%{_appdir}
-%attr(775,red5,servlet) %{_localstatedir}/%{name}
+%{_appdatadir}
+%attr(775,red5,servlet) %{_appstatedir}
+%attr(775,red5,servlet) %{_applogdir}
+%config(noreplace) %attr(664,root,tomcat) %verify(not md5 mtime size) %{_appconfdir}
 
 %files javadoc
 %defattr(644,root,root,755)
