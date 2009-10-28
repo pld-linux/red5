@@ -32,7 +32,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_appconfdir	%{_sysconfdir}/%{name}
 %define		_appdatadir	%{_datadir}/%{name}
-%define		_appstatedir	%{_localstatedir}/%{name}
+%define		_appstatedir	%{_localstatedir}/lib/%{name}
 %define		_applogdir	%{_var}/log/%{name}
 
 %description
@@ -70,7 +70,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_appdatadir},%{_sbindir},%{_appstatedir},%{_appconfdir},%{_applogdir}}
 install -d $RPM_BUILD_ROOT{/etc/sysconfig,/etc/rc.d/init.d,/var/run/red5}
 
-cp -a {red5.jar,lib} $RPM_BUILD_ROOT%{_appdatadir}
+cp -a {red5.jar,boot.jar,lib} $RPM_BUILD_ROOT%{_appdatadir}
 cp -a webapps $RPM_BUILD_ROOT%{_appstatedir}
 cp -a conf/* $RPM_BUILD_ROOT%{_appconfdir}
 
