@@ -32,7 +32,6 @@ SECURITY_OPTS="-Djava.security.debug=failure"
   	$SECURITY_OPTS \
   	-Dpython.home=$RED5_HOME/lib \
   	-Dred5.root=$RED5_HOME \
-  	-Dred5.webappsdir=$RED5_WEBAPPSDIR \
   	-cp $RED5_CLASSPATH org.red5.server.Bootstrap "$@" >> /var/log/red5/red5.out &
   
   PID=$!
