@@ -56,10 +56,10 @@ Group:		Documentation
 Requires:	jpackage-utils
 
 %description javadoc
-Documentation for %{name}.
+API documentation for %{name}.
 
 %description javadoc -l pl.UTF-8
-Dokumentacja do %{name}.
+Dokumentacja API do %{name}.
 
 %prep
 %setup -q -c
@@ -116,14 +116,14 @@ ln -nfs %{name}-%{version} %{_javadocdir}/%{name}
 
 %files
 %defattr(644,root,root,755)
-%doc license.txt
+%doc doc/licenseInfo/team.txt doc/*.* doc/templates
 %{_appdatadir}
 %dir %attr(775,red5,red5) %{_appstatedir}
 %attr(775,red5,red5) %{_appstatedir}/work
 %attr(775,red5,servlet) %{_appstatedir}/webapps
 %attr(775,red5,red5) %{_applogdir}
-%dir %attr(755,root,root) %{_appconfdir}
-%config(noreplace) %attr(644,root,root) %verify(not md5 mtime size) %{_appconfdir}/*
+%dir %{_appconfdir}
+%config(noreplace) %verify(not md5 mtime size) %{_appconfdir}/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(770,root,red5) /var/run/%{name}
