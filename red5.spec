@@ -1,11 +1,12 @@
 # TODO
 # - -demos package
 
+%include	/usr/lib/rpm/macros.java
 Summary:	Red5: Open Source Flash Server
 Summary(pl.UTF-8):	Red5: Otwarty serwer Flasha
 Name:		red5
 Version:	0.8.0
-Release:	0.1
+Release:	1
 License:	LGPL
 Group:		Networking/Daemons/Java
 Source0:	http://www.red5.org/downloads/0_8/%{name}-%{version}.tar.gz
@@ -14,6 +15,7 @@ Source1:	%{name}
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
 URL:		http://red5.org/
+BuildRequires:	rpm-javaprov
 BuildRequires:	rpmbuild(macros) >= 1.300
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
