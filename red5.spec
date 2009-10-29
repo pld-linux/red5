@@ -1,14 +1,13 @@
 # TODO
-# - packaging
 # - -demos package
-#
+
 Summary:	Red5: Open Source Flash Server
 Summary(pl.UTF-8):	Red5: Otwarty serwer Flasha
 Name:		red5
 Version:	0.8.0
 Release:	0.1
 License:	LGPL
-Group:		Applications
+Group:		Networking/Daemons/Java
 Source0:	http://www.red5.org/downloads/0_8/%{name}-%{version}.tar.gz
 # Source0-md5:	7be9296e6369a52b3607cfce1ac7ee01
 Source1:	%{name}
@@ -77,6 +76,7 @@ cp -a conf/* $RPM_BUILD_ROOT%{_appconfdir}
 ln -s %{_appconfdir} $RPM_BUILD_ROOT%{_appdatadir}/conf
 ln -s %{_appstatedir}/webapps $RPM_BUILD_ROOT%{_appdatadir}/webapps
 ln -s %{_appstatedir}/work $RPM_BUILD_ROOT%{_appdatadir}/work
+ln -s %{_applogdir} $RPM_BUILD_ROOT%{_appdatadir}/log
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_sbindir}/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/red5
