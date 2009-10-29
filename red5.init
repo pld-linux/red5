@@ -17,6 +17,10 @@
 # Get service config - may override defaults
 [ -f /etc/sysconfig/red5 ] && . /etc/sysconfig/red5
 
+export RED5_HOME
+export RED5_WEBAPPSDIR
+export RED5_CLASSPATH
+
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
 	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then

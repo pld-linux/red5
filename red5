@@ -14,9 +14,9 @@ fi
 . /usr/share/java-utils/java-functions
 set_javacmd
 
-export RED5_HOME=${RED5_HOME:-/usr/share/red5}
-export RED5_WEBAPPSDIR=${RED5_WEBAPPSDIR:-/var/lib/red5/webapps}
-export RED5_CLASSPATH=${RED5_CLASSPATH:+$RED5_CLASSPATH:}$RED5_HOME/boot.jar:/etc/red5
+RED5_HOME=${RED5_HOME:-/usr/share/red5}
+RED5_WEBAPPSDIR=${RED5_WEBAPPSDIR:-/var/lib/red5/webapps}
+RED5_CLASSPATH=${RED5_CLASSPATH:+$RED5_CLASSPATH:}$RED5_HOME/boot.jar:/etc/red5
 
 LOGGING_OPTS="-Dlogback.ContextSelector=org.red5.logging.LoggingContextSelector -Dcatalina.useNaming=true"
 SECURITY_OPTS="-Djava.security.debug=failure"
