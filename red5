@@ -5,6 +5,11 @@ if [ -f /var/run/red5/red5.pid ]; then
 	exit 1
 fi
 
+if [ "$(whoami)" != "red5" ]; then
+	echo >&2 "This script must be run as red5 user."
+	exit 1
+fi
+
 # set $JAVACMD
 . /usr/share/java-utils/java-functions
 set_javacmd
@@ -16,23 +21,26 @@ export RED5_CLASSPATH=$RED5_CLASSPATH${RED5_CLASSPATH:+}$RED5_HOME/boot.jar:/etc
 LOGGING_OPTS="-Dlogback.ContextSelector=org.red5.logging.LoggingContextSelector -Dcatalina.useNaming=true"
 SECURITY_OPTS="-Djava.security.debug=failure"
 
-trap 'pid=$(cat /var/run/red5/red5.pid 2>/dev/null); [ "$pid" ] && kill $pid' TERM INT EXIT
-
-# start red5
-cd "$RED5_HOME"
-$JAVACMD \
-	$JAVA_OPTS \
-	$LOGGING_OPTS \
-	$SECURITY_OPTS \
-	-Dpython.home=$RED5_HOME/lib \
-	-Dred5.root=$RED5_HOME \
-	-Dred5.webappsdir=$RED5_WEBAPPSDIR \
-	-cp $RED5_CLASSPATH org.red5.server.Bootstrap "$@" >> /var/log/red5/red5.out &
-
-PID=$!
-
-# XXX: what happens if $JAVACMD fails and $PID is empty?
-
-echo "$PID" > /var/run/red5/red5.pid
-wait $PID
-rm /var/run/red5/red5.pid
+# This subshell is a wrapper that adds pidfile support
+(
+  trap 'pid=$(cat /var/run/red5/red5.pid 2>/dev/null); [ "$pid" ] && kill $pid' TERM INT EXIT
+  # start red5
+  cd "$RED5_HOME"
+  $JAVACMD \
+  	$JAVA_OPTS \
+  	$LOGGING_OPTS \
+  	$SECURITY_OPTS \
+  	-Dpython.home=$RED5_HOME/lib \
+  	-Dred5.root=$RED5_HOME \
+  	-Dred5.webappsdir=$RED5_WEBAPPSDIR \
+  	-cp $RED5_CLASSPATH org.red5.server.Bootstrap "$@" >> /var/log/red5/red5.out &
+  
+  PID=$!
+  
+  # XXX: what happens if $JAVACMD fails and $PID is empty?
+  # - if $PID is empty, or it is not a child process of current shell, wait command will terminate imediately, 
+  
+  echo "$PID" > /var/run/red5/red5.pid
+  wait $PID
+  rm /var/run/red5/red5.pid
+) &
