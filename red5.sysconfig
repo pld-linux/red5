@@ -2,7 +2,7 @@
 #JAVA_HOME=java-sun-1.6.0.16
 
 # Set java memory limits
-#JAVA_OPTS=-Xmx384M -XX:MaxPermSize=192m -XX:PermSize=128m
+#JAVA_OPTS="-Djava.library.path=/usr/lib64:/usr/lib -Xmx384M -XX:MaxPermSize=192m -XX:PermSize=128m"
 
 # red5 boot class path. If you need some classes to be loaded before spring,
 # add them here.
