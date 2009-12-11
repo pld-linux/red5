@@ -14,9 +14,13 @@
 # Get network config
 . /etc/sysconfig/network
 
+JAVA_OPTS="-Djava.library.path=/usr/lib:/usr/lib64"
+
 # Get service config - may override defaults
 [ -f /etc/sysconfig/red5 ] && . /etc/sysconfig/red5
 
+export JAVA_HOME
+export JAVA_OPTS
 export RED5_HOME
 export RED5_WEBAPPSDIR
 export RED5_CLASSPATH
