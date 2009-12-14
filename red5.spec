@@ -24,7 +24,11 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
+Requires:	eclipse-jdt
 Requires:	rc-scripts
+Requires:	java-tomcat-catalina >= 6.0.20-7
+Requires:	java-tomcat-coyote >= 6.0.20-7
+Requires:	java-tomcat-jasper >= 6.0.20-7
 Suggests:	tomcat-native
 Provides:	group(red5)
 Provides:	group(servlet)
@@ -66,6 +70,10 @@ Dokumentacja API do %{name}.
 
 %prep
 %setup -q -c
+
+rm lib/catalina-*.jar
+rm lib/jasper-*.jar
+rm lib/tomcat-coyote-*.jar
 
 %install
 rm -rf $RPM_BUILD_ROOT
