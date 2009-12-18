@@ -1,16 +1,20 @@
 # TODO
 # - -demos package
 
+%define		_rc	2
+
 %include	/usr/lib/rpm/macros.java
 Summary:	Red5: Open Source Flash Server
 Summary(pl.UTF-8):	Red5: Otwarty serwer Flasha
 Name:		red5
-Version:	0.8.0
-Release:	2
+Version:	0.9
+Release:	0.%{_rc}.1
 License:	LGPL
 Group:		Networking/Daemons/Java
-Source0:	http://www.red5.org/downloads/0_8/%{name}-%{version}.tar.gz
-# Source0-md5:	7be9296e6369a52b3607cfce1ac7ee01
+# wget -c http://www.red5.org/downloads/0_9/red5-0.9.RC2.tar.gz
+Source0:	red5-0.9.RC2.tar.gz
+# Source0-md5:	b1150391591f4ea6cdc30b38fd3732eb
+NoSource:	0
 Source1:	%{name}
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
@@ -56,18 +60,6 @@ Red5 to napisany w Javie otwarty serwer Flasha obsługujący:
 - Współdzielenie obiektów
 - Publikowanie strumieni na żywo
 
-%package javadoc
-Summary:	Online manual for %{name}
-Summary(pl.UTF-8):	Dokumentacja online do %{name}
-Group:		Documentation
-Requires:	jpackage-utils
-
-%description javadoc
-API documentation for %{name}.
-
-%description javadoc -l pl.UTF-8
-Dokumentacja API do %{name}.
-
 %prep
 %setup -q -c
 
@@ -93,11 +85,6 @@ install %{SOURCE1} $RPM_BUILD_ROOT%{_sbindir}/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/red5
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/red5
 
-# javadoc
-install -d $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
-cp -a doc/api/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
-ln -s %{name}-%{version} $RPM_BUILD_ROOT%{_javadocdir}/%{name} # ghost symlink
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -122,12 +109,9 @@ if [ "$1" = "0" ]; then
 	%groupremove servlet
 fi
 
-%post javadoc
-ln -nfs %{name}-%{version} %{_javadocdir}/%{name}
-
 %files
 %defattr(644,root,root,755)
-%doc doc/licenseInfo/team.txt doc/*.* doc/templates
+%doc license.txt
 %{_appdatadir}
 %dir %attr(775,red5,red5) %{_appstatedir}
 %attr(775,red5,red5) %{_appstatedir}/work
@@ -139,8 +123,3 @@ ln -nfs %{name}-%{version} %{_javadocdir}/%{name}
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(770,root,red5) /var/run/%{name}
 %attr(755,root,root) %{_sbindir}/%{name}
-
-%files javadoc
-%defattr(644,root,root,755)
-%{_javadocdir}/%{name}-%{version}
-%ghost %{_javadocdir}/%{name}
