@@ -13,7 +13,7 @@ License:	LGPL
 Group:		Networking/Daemons/Java
 # wget -c http://www.red5.org/downloads/0_9/red5-0.9.RC2.tar.gz
 Source0:	%{name}-%{version}.%{_rc}.tar.gz
-# Source0-md5:	b1150391591f4ea6cdc30b38fd3732eb
+# NoSource0-md5:	b1150391591f4ea6cdc30b38fd3732eb
 NoSource:	0
 Source1:	%{name}
 Source2:	%{name}.init
