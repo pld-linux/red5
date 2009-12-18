@@ -21,6 +21,7 @@ CLASSPATH=$CLASSPATH:$(find-jar tomcat6-coyote)
 CLASSPATH=$CLASSPATH:$(find-jar jasper)
 CLASSPATH=$CLASSPATH:$(find-jar jasper-el)
 CLASSPATH=$CLASSPATH:$(find-jar org.eclipse.jdt.core)
+CLASSPATH=$CLASSPATH:$(build-classpath-directory /usr/share/red5/lib)
 RED5_CLASSPATH=${RED5_CLASSPATH:+$RED5_CLASSPATH:}$CLASSPATH:$RED5_HOME/boot.jar:/etc/red5
 
 LOGGING_OPTS="-Dlogback.ContextSelector=org.red5.logging.LoggingContextSelector -Dcatalina.useNaming=true"
