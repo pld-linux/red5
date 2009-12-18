@@ -1,7 +1,7 @@
 # TODO
 # - -demos package
 
-%define		_rc	2
+%define		_rc	RC2
 
 %include	/usr/lib/rpm/macros.java
 Summary:	Red5: Open Source Flash Server
@@ -12,7 +12,7 @@ Release:	0.%{_rc}.1
 License:	LGPL
 Group:		Networking/Daemons/Java
 # wget -c http://www.red5.org/downloads/0_9/red5-0.9.RC2.tar.gz
-Source0:	red5-0.9.RC2.tar.gz
+Source0:	%{name}-%{version}.%{_rc}.tar.gz
 # Source0-md5:	b1150391591f4ea6cdc30b38fd3732eb
 NoSource:	0
 Source1:	%{name}
@@ -29,10 +29,10 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	eclipse-jdt
-Requires:	rc-scripts
 Requires:	java-tomcat-catalina >= 6.0.20-7
 Requires:	java-tomcat-coyote >= 6.0.20-7
 Requires:	java-tomcat-jasper >= 6.0.20-7
+Requires:	rc-scripts
 Suggests:	tomcat-native
 Provides:	group(red5)
 Provides:	group(servlet)
