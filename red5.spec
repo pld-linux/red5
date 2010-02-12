@@ -1,16 +1,17 @@
 # TODO
 # - -demos package
+# - use more jar libraries from javadir instead of bundled ones
 
 %include	/usr/lib/rpm/macros.java
 Summary:	Red5: Open Source Flash Server
 Summary(pl.UTF-8):	Red5: Otwarty serwer Flasha
 Name:		red5
-Version:	0.8.0
-Release:	2
+Version:	0.9.0
+Release:	1
 License:	LGPL
 Group:		Networking/Daemons/Java
-Source0:	http://www.red5.org/downloads/0_8/%{name}-%{version}.tar.gz
-# Source0-md5:	7be9296e6369a52b3607cfce1ac7ee01
+Source0:	http://www.red5.org/downloads/0_9/%{name}-%{version}.tar.gz
+# Source0-md5:	01728fa619a74a6840b3e9c379178c0b
 Source1:	%{name}
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
@@ -69,7 +70,7 @@ API documentation for %{name}.
 Dokumentacja API do %{name}.
 
 %prep
-%setup -q -c
+%setup -q
 
 rm lib/catalina-*.jar
 rm lib/jasper-*.jar
