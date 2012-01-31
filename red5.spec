@@ -15,6 +15,7 @@ Source0:	http://www.red5.org/downloads/0_9/%{name}-%{version}.tar.gz
 Source1:	%{name}
 Source2:	%{name}.init
 Source3:	%{name}.sysconfig
+Source4:	%{name}.tmpfiles
 URL:		http://red5.org/
 BuildRequires:	rpm-javaprov
 BuildRequires:	rpmbuild(macros) >= 1.300
@@ -78,8 +79,9 @@ rm lib/tomcat-coyote-*.jar
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_appdatadir},%{_sbindir},%{_appstatedir}/work,%{_appconfdir},%{_applogdir}}
-install -d $RPM_BUILD_ROOT{/etc/sysconfig,/etc/rc.d/init.d,/var/run/red5}
+install -d $RPM_BUILD_ROOT{%{_appdatadir},%{_sbindir},%{_appstatedir}/work,%{_appconfdir},%{_applogdir}} \
+	$RPM_BUILD_ROOT{/etc/sysconfig,/etc/rc.d/init.d,/var/run/red5} \
+	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
 
 cp -a {red5.jar,boot.jar,lib} $RPM_BUILD_ROOT%{_appdatadir}
 cp -a webapps $RPM_BUILD_ROOT%{_appstatedir}
@@ -93,6 +95,7 @@ ln -s %{_applogdir} $RPM_BUILD_ROOT%{_appdatadir}/log
 install %{SOURCE1} $RPM_BUILD_ROOT%{_sbindir}/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/red5
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/red5
+install %{SOURCE4} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
 
 # javadoc
 install -d $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
@@ -139,6 +142,7 @@ ln -nfs %{name}-%{version} %{_javadocdir}/%{name}
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(770,root,red5) /var/run/%{name}
+/usr/lib/tmpfiles.d/%{name}.conf
 %attr(755,root,root) %{_sbindir}/%{name}
 
 %files javadoc
