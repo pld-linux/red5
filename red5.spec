@@ -7,7 +7,7 @@ Summary:	Red5: Open Source Flash Server
 Summary(pl.UTF-8):	Red5: Otwarty serwer Flasha
 Name:		red5
 Version:	0.9.0
-Release:	1
+Release:	2
 License:	LGPL
 Group:		Networking/Daemons/Java
 Source0:	http://www.red5.org/downloads/0_9/%{name}-%{version}.tar.gz
