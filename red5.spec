@@ -5,7 +5,6 @@
 # Conditional build:
 %bcond_with	javadoc		# don't build javadoc
 
-%include	/usr/lib/rpm/macros.java
 Summary:	Red5: Open Source Flash Server
 Summary(pl.UTF-8):	Red5: Otwarty serwer Flasha
 Name:		red5
